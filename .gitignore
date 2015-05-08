@@ -4,3 +4,7 @@
 
 # Vagrant
 .vagrant
+
+# Gradle
+.gradle
+build
