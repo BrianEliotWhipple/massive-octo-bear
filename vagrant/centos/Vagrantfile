@@ -1,0 +1,42 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = '2'
+
+# Can be 7 or 8
+java_version = '8'
+
+# Can be 2.0 or 2.1
+cassandra_version = '2.1'
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vm.box = 'chef/centos-6.6'
+
+  # Create a private network, which allows host-only access to the machine
+  # using a specific IP.
+  config.vm.network 'private_network', ip: '192.168.11.100'
+  config.vm.synced_folder '../../services', '/services'
+
+  config.vm.provider 'virtualbox' do |vb|
+    config.vm.provider 'virtualbox' do |vb|
+      vb.memory = 1024
+      vb.cpus = 2
+      end
+  end
+
+  config.vm.provision 'docker' do | d |
+    d.pull_images 'registry:2.0'
+    d.pull_images 'google/cadvisor:latest'
+    d.pull_images 'debian:jessie'
+    d.pull_images "java:#{java_version}"
+    d.pull_images "cassandra:#{cassandra_version}"
+
+    d.run 'cassandra:2.1',
+      args: '--name cassandra-centos-1',
+      daemonize: true
+
+  end
+
+end
