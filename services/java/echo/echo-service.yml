@@ -45,3 +45,7 @@ logging:
 #      archivedLogFilenamePattern: /tmp/application-%d{yyyy-MM-dd}.log
 #      archivedFileCount: 7
 #      timeZone: UTC
+
+cassandra:
+    seedHost: ${CASSANDRA_SEED_HOST}
+    seedCqlPort: 9042

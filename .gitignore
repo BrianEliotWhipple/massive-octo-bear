@@ -8,3 +8,6 @@
 # Gradle
 .gradle
 build
+
+# Dagger auto generated code
+dagger

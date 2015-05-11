@@ -33,8 +33,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     d.pull_images "cassandra:#{cassandra_version}"
 
     d.run 'cassandra:2.1',
-      args: '--name cassandra-ubuntu-1',
-      daemonize: true
+          args: '--name cassandra-1',
+        daemonize: true
 
   end
 
