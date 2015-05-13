@@ -2,12 +2,8 @@ package com.example.echo;
 
 import dagger.Module;
 import dagger.Provides;
-import io.dropwizard.Configuration;
 import io.dropwizard.setup.Environment;
 
-/**
- * Created by whipple on 5/11/2015.
- */
 @Module
 public class DropwizardEnvironmentModule {
 

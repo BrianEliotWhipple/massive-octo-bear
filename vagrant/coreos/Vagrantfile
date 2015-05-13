@@ -126,7 +126,7 @@ Vagrant.configure("2") do |config|
         d.pull_images "cassandra:#{cassandra_version}"
 
         d.run 'cassandra:2.1',
-              args: '--name cassandra-1',
+              args: '--name cassandra-1 -p 9042:9042',
             daemonize: true
 
       end

@@ -1,4 +1,4 @@
-package com.example.echo.cassandra;
+package com.example.echo.providers.cassandra;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -6,9 +6,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
-/**
- * Created by whipple on 5/11/2015.
- */
 public class CassandraConfig {
 
     @NotEmpty

@@ -1,32 +1,35 @@
-package com.example.echo.cassandra;
+package com.example.echo.providers.cassandra;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Host;
 import com.datastax.driver.core.Metadata;
 import com.datastax.driver.core.Session;
+import com.example.echo.EchoConfiguration;
+import com.example.echo.providers.EchoMessageProvider;
+import com.example.echo.providers.SchemaBuilder;
 import dagger.Module;
 import dagger.Provides;
 import io.dropwizard.lifecycle.Managed;
 import io.dropwizard.setup.Environment;
 
-import javax.inject.Inject;
-
 @Module
 public class CassandraModule {
 
-    private Environment environment;
-    private CassandraConfig cassandraConfig;
-
-    @Inject
-    public CassandraModule(Environment env, CassandraConfig config) {
-        this.environment = env;
-        this.cassandraConfig = config;
+    @Provides
+    public SchemaBuilder providesSchemaBuilder(Session session) {
+        return new CassandraSchemaBuilder(session);
     }
 
     @Provides
-    public Session providesSession() {
-        final Cluster cluster = Cluster.builder().addContactPoints(cassandraConfig.getSeedHost())
-                .withPort(cassandraConfig.getSeedCqlPort()).build();
+    public EchoMessageProvider providesEchoMessageProvider(Session session) {
+        return new CassandraEchoMessageProvider(session);
+    }
+
+    @Provides
+    public Session providesSession(Environment environment, EchoConfiguration config) {
+        final Cluster cluster = Cluster.builder()
+                .addContactPoints(config.getCassandraConfig().getSeedHost())
+                .withPort(config.getCassandraConfig().getSeedCqlPort()).build();
         Metadata clusterMetadata = cluster.getMetadata();
         System.out.printf("Connected to cluster: %s\n",
                 clusterMetadata.getClusterName());

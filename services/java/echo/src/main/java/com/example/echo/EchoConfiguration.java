@@ -1,6 +1,6 @@
 package com.example.echo;
 
-import com.example.echo.cassandra.CassandraConfig;
+import com.example.echo.providers.cassandra.CassandraConfig;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
 

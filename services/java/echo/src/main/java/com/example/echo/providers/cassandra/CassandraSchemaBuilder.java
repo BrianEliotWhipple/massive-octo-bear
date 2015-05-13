@@ -1,15 +1,16 @@
-package com.example.echo.cassandra;
+package com.example.echo.providers.cassandra;
 
 import com.datastax.driver.core.Session;
+import com.example.echo.providers.SchemaBuilder;
 
 import javax.inject.Inject;
 
-public class SchemaBuilder {
+public class CassandraSchemaBuilder implements SchemaBuilder {
 
-    private Session session;
+    private final Session session;
 
     @Inject
-    public SchemaBuilder(Session session) {
+    public CassandraSchemaBuilder(Session session) {
         this.session = session;
     }
 

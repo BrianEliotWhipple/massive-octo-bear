@@ -51,3 +51,7 @@ jar {
 shadowJar {
     mergeServiceFiles('META-INF/services')
 }
+
+clean {
+    delete 'src/dagger'
+}

@@ -1,7 +1,7 @@
 package com.example.echo;
 
-import com.datastax.driver.core.Session;
-import com.example.echo.cassandra.SchemaBuilder;
+import com.example.echo.providers.SchemaBuilder;
+import com.example.echo.resources.LogResource;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -10,6 +10,7 @@ import io.dropwizard.configuration.SubstitutingSourceProvider;
 import com.example.echo.resources.EchoResource;
 
 public class EchoApplication extends Application<EchoConfiguration> {
+
 
     public static void main(String[] args) throws Exception {
         new EchoApplication().run(args);
@@ -33,14 +34,22 @@ public class EchoApplication extends Application<EchoConfiguration> {
     @Override
     public void run(EchoConfiguration configuration,
                     Environment environment) {
-        EchoService.init(environment, configuration);
-        registerResources(environment);
+        EchoComponent echoComponent = EchoComponent.createEchoComponent(environment,
+            configuration);
+        createSchema(echoComponent.getSchemaBuilder());
+        registerResources(environment, echoComponent);
         registerHealthChecks(environment);
     }
 
-    private void registerResources(Environment environment) {
-        final EchoResource resource = new EchoResource();
-        environment.jersey().register(resource);
+    private void createSchema(SchemaBuilder schemaBuilder) {
+        schemaBuilder.createSchema();
+    }
+
+    private void registerResources(Environment environment, EchoComponent echoComponent) {
+        EchoResource echoResource = new EchoResource(echoComponent.getEchoMessageProvider());
+        environment.jersey().register(echoResource);
+        LogResource logResource = new LogResource(echoComponent.getEchoMessageProvider());
+        environment.jersey().register(logResource);
     }
 
     private void registerHealthChecks(Environment environment) {
