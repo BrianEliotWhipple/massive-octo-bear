@@ -35,7 +35,7 @@ Example micro-service projects can be found under ```/service/${language}``` dir
 ### Java Echo Service
 
 The Java Echo service found under ```/service/java/echo``` is a simple REST service that can
-echo and log (persist) service requests.  The service uses the following tools:
+echo and log (persist to Cassandra) service requests.  The service uses the following tools:
 
 * Dropwizard REST service framework: http://www.dropwizard.io/
 * Google Dagger 2.0 Dependency Injection: http://google.github.io/dagger/
@@ -58,6 +58,7 @@ injected into the service configuration via the CASSANDRA_SEED_HOST environment 
 * cd to ```/service/java/echo```
 * Run ```export CASSANDRA_SEED_HOSTS=${your cassandra seed host or ip address}```
 * Run ```java -jar ./build/libs/echo-0.1-all.jar server echo-service.yml```  
+* ```curl localhost:8080/echo``` should return a json response from the service
 
 If you have started one of the Vagrant Docker boxes described above, by default they will run and
 expose Cassandra CQL port and its private network IP address can be used as the CASSANDRA_SEED_HOST.
@@ -74,17 +75,31 @@ service.
 The script ```/services/java/echo/docker_run.sh``` can be used to run the Echo service.  The run
 script requires that Cassandra is running as a Docker container named ```cassandra-1```.
 
+Use the following commands to build and run the Echo service as a Docker container:
+
+* cd to ```/vagrant/centos``` or ```/vagrant/ubuntu```
+* run ```vagrant up``` to start the Docker virtual machine.
+* run ```vagrant ssh``` to log into the Docker virtual machine.
+* cd to ```/services/java/echo```
+* run ```docker_build.sh```
+* ```sudo docker images``` should now list a ```/pros/echo``` image with a 0.1 tag
+* run ```docker_run.sh```
+* ```sudo docker ps``` should list both the cassandra-1 and pros-echo containers
+* ```curl localhost:8080/echo``` should return json response from the service
+* ```sudo docker logs pros-echo``` will list the Echo service application log
+
 TODO docker push echo image to private registry
+
 TODO docker pull from private registry - for CoreOS
 
 ## Tool Dependencies
 
-This project has been tested with the following tools. Using alternate version might result in
+This project has been tested with the following tools. Using alternate versions might result in
 unexpected results.
 
 ### Workstation Host Platforms
 
-* Windows 7
+* Windows 7 (with msysGit Git Bash shell)
 
 ### Local Virtual Machines
 
