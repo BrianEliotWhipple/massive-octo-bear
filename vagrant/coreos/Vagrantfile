@@ -119,7 +119,7 @@ Vagrant.configure("2") do |config|
       end
 
       config.vm.provision 'docker' do | d |
-        d.pull_images 'registry:2.0'
+        d.pull_images 'registry:0.9.1'
         d.pull_images 'google/cadvisor:latest'
         d.pull_images 'debian:jessie'
         d.pull_images "java:#{java_version}"

@@ -12,7 +12,7 @@ cassandra_version = '2.1'
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  # Centos 7.0 had problems starting Docker
+  # Centos 7.0 had problems with Vagrant Docker provisioner
   config.vm.box = 'chef/centos-6.6'
 
   # Create a private network, which allows host-only access to the machine
@@ -27,18 +27,34 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end
   end
 
+
   config.vm.provision 'docker' do | d |
 
-    d.pull_images 'registry:2.0'
+    d.pull_images 'registry:0.9.1'
     d.pull_images 'google/cadvisor:latest'
     d.pull_images 'debian:jessie'
     d.pull_images "java:#{java_version}"
     d.pull_images "cassandra:#{cassandra_version}"
 
-    d.run 'cassandra:2.1',
-          args: '--name cassandra-1 -p 9042:9042',
-        daemonize: true
-
   end
 
+
+  $script = <<SCRIPT
+    sudo sed -i 's/other_args=/other_args="--insecure-registry 192.168.0.0\\/16"/g' /etc/sysconfig/docker
+    sudo service docker restart
+SCRIPT
+
+  config.vm.provision 'shell', inline: $script
+
+  config.vm.provision 'docker' do | d |
+
+    d.run 'cassandra:2.1',
+        args: '--name cassandra-1 -p 9042:9042',
+      daemonize: true
+
+    d.run 'registry:0.9.1',
+        args: '--name docker-registry -p 5000:5000',
+      daemonize: true
+
+  end
 end

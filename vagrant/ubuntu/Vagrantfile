@@ -25,8 +25,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
+  $script = <<SCRIPT
+    sudo echo DOCKER_OPTS=\\"\\$DOCKER_OPTS --insecure-registry 192.168.0.0/16\\" >> /etc/default/docker
+SCRIPT
+
+  config.vm.provision 'shell', inline: $script
+
   config.vm.provision 'docker' do | d |
-    d.pull_images 'registry:2.0'
+    d.pull_images 'registry:0.9.1'
     d.pull_images 'google/cadvisor:latest'
     d.pull_images 'debian:jessie'
     d.pull_images "java:#{java_version}"
@@ -34,6 +40,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     d.run 'cassandra:2.1',
           args: '--name cassandra-1 -p 9042:9042',
+        daemonize: true
+
+    d.run 'registry:0.9.1',
+          args: '--name docker-registry -p 5000:5000',
         daemonize: true
 
   end

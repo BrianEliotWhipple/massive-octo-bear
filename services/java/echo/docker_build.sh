@@ -1,3 +1,3 @@
 #!/bin/sh
 
-sudo docker build -t pros/echo:0.1 .
+sudo docker build -t example/java-echo:0.1 .

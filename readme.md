@@ -13,11 +13,11 @@ Run ```vagrant up``` under ```/vagrant/${platform}``` directories to deploy Dock
 
 The Vagrant boxes will install the following images using the Vagrant Docker provisioner:
 
-* registry:2.0 - Docker registry
+* registry:0.9.1 - Docker registry
 * google/cadvisor:latest - Google container monitoring tool
 * debian:jessie - Base Debian image
 * java:8 - Base Java image, can switch to Java 7
-* cassandra:2.1 - Base Cassandra image, can switch to 2.1
+* cassandra:2.1 - Base Cassandra image, can switch to 2.0
 
 The Vagrant Docker provisioner will also run the Cassandra image, name it *cassandra-1* and
 expose the CQL port 9042 on the local host.
@@ -82,15 +82,40 @@ Use the following commands to build and run the Echo service as a Docker contain
 * run ```vagrant ssh``` to log into the Docker virtual machine.
 * cd to ```/services/java/echo```
 * run ```docker_build.sh```
-* ```sudo docker images``` should now list a ```/pros/echo``` image with a 0.1 tag
+* ```sudo docker images``` should now list a ```/example/java-echo``` image with a 0.1 tag
 * run ```docker_run.sh```
-* ```sudo docker ps``` should list both the cassandra-1 and pros-echo containers
+* ```sudo docker ps``` should list both the cassandra-1 and example-java-echo containers
 * ```curl localhost:8080/echo``` should return json response from the service
-* ```sudo docker logs pros-echo``` will list the Echo service application log
+* ```sudo docker logs example-java-echo``` will list the Echo service application log
 
-TODO docker push echo image to private registry
+#### Pushing and Pulling Images With Private Registry
 
-TODO docker pull from private registry - for CoreOS
+A local private registry can be started on either the Ubuntu or CentOS Vagrant box with the
+following command:
+
+* ```sudo docker run -d --name=docker-registry -p 5000:5000 registry:0.9.1```
+
+Note:  In order for Docker to support a private registry with HTTPS and valid certificate, the
+Vagrant configuration will add ```--insecure-registry 192.168.0.0/16``` to the Docker daemon
+startup configuration files.  This will enable http registry access for all registries on the
+Vagrant private networks.
+
+Once the private Docker registry is running, the service image can be published to the registry
+with the following commands (first build the service as described above):
+
+* ```sudo docker images``` and find the image id of the example/java-echo image.
+* ```sudo docker tag ${example java echo image id}
+  ${ip address of private registry host}:5000/example-java-echo``` 
+* ```sudo docker push ${ip address of private registry host}:5000/example-java-echo```
+
+Now other Docker hosts can pull the example/java-echo image with:
+
+* ```sudo docker pull ${ip address of private registry host}:5000/example-java-echo```
+
+And the service can be run (assuming that the Cassandra container is running):
+
+* ```sudo docker run -d --name example-java-echo -p 8080:8080 -p 8081:8081 --link cassandra-1:cassandra \
+           -e CASSANDRA_SEED_HOST=cassandra  ${ip address of private registry host}:5000/example-java-echo``` 
 
 ## Tool Dependencies
 
@@ -109,4 +134,3 @@ unexpected results.
 ### Java Services
 
 * Java JDK version 8
-
