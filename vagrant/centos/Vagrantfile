@@ -13,7 +13,7 @@ cassandra_version = '2.1'
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Centos 7.0 had problems with Vagrant Docker provisioner
-  config.vm.box = 'chef/centos-6.6'
+  config.vm.box = 'chef/centos-7.1'
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -22,11 +22,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provider 'virtualbox' do |vb|
     config.vm.provider 'virtualbox' do |vb|
-      vb.memory = 1024
-      vb.cpus = 2
+      vb.memory = 4096
+      vb.cpus = 4
       end
   end
 
+  # Added to fix Vagrant bug #5709 as of 5/27/2015 to activate the private network interface
+  config.vm.provision 'shell', inline: 'nmcli connection reload; systemctl restart network.service'
+
+  # Adding group 'docker' is workaround for bug #5686 in Vagrant Docker Provisioner as of 5/26/15
+  config.vm.provision 'shell', inline: 'groupadd -f docker'
+
+  # CentOS Vagrant Docker provisioner does not support pinning versions
+  #config.vm.provision 'docker', version: '1.6.2'
 
   config.vm.provision 'docker' do | d |
 
@@ -37,7 +45,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     d.pull_images "cassandra:#{cassandra_version}"
 
   end
-
 
   $script = <<SCRIPT
     sudo sed -i 's/other_args=/other_args="--insecure-registry 192.168.0.0\\/16"/g' /etc/sysconfig/docker
@@ -57,4 +64,8 @@ SCRIPT
       daemonize: true
 
   end
+
+  config.vm.provision 'shell', path: 'install_local_docker_images.sh'
+  config.vm.provision 'shell', path: 'install_mesos.sh'
+
 end

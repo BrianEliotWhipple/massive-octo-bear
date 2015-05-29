@@ -1,6 +1,7 @@
 # Demonstration Project for Deploying Micro-services in Docker
 
 This project serves as example to build, deploy and test micro-services as Docker containers.
+Also used to trial Mesos/Marathon for use as a cluster manager.
 
 ## Docker Environments
 
@@ -117,6 +118,20 @@ And the service can be run (assuming that the Cassandra container is running):
 * ```sudo docker run -d --name example-java-echo -p 8080:8080 -p 8081:8081 --link cassandra-1:cassandra \
            -e CASSANDRA_SEED_HOST=cassandra  ${ip address of private registry host}:5000/example-java-echo``` 
 
+### Running Services With Mesos/Marathon
+
+The Vagrantfile for both Centos and Ubuntu will install Mesos and Marathon on the Vagrant box.
+Once the vagrant box is running, Casandara and the Java Echo service can be run by:
+
+* ```cd /vagrant/ubuntu/mesos```
+* ```./create_apps.sh```
+
+After the Marathon apps have been created you can use the Echo service:
+
+* ```curl localhost:30001/echo```
+
+The port 30001 is used since Marathon is already using the port 8080.
+
 ## Tool Dependencies
 
 This project has been tested with the following tools. Using alternate versions might result in
@@ -128,8 +143,8 @@ unexpected results.
 
 ### Local Virtual Machines
 
-* Vagrant version 1.6.3
-* VirtualBox version 4.3.20
+* Vagrant version 1.7.2
+* VirtualBox version 4.3.28
  
 ### Java Services
 

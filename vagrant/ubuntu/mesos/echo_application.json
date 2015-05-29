@@ -1,0 +1,55 @@
+{
+  "id": "/example/echo-service",
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "example/java-echo:0.1",
+      "network": "BRIDGE",
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": 31001,
+          "servicePort": 0,
+          "protocol": "tcp"
+        },
+        {
+          "containerPort": 8081,
+          "hostPort": 31002,
+          "servicePort": 0,
+          "protocol": "tcp"
+        }
+      ],
+      "privileged": false,
+      "parameters": [
+        { "key": "env", "value": "CASSANDRA_SEED_HOST=192.168.12.100" }
+      ]
+    },
+    "volumes": [ ]
+  },
+  "cpus": 1.0,
+  "mem": 512,
+  "deployments": [ ],
+  "env": { },
+  "executor": "",
+  "constraints": [ ],
+  "acceptedResourceRoles": [ ],
+  "labels": { },
+  "healthChecks": [
+  ],
+  "instances": 1,
+  "ports": [],
+  "backoffSeconds": 1,
+  "backoffFactor": 1.15,
+  "maxLaunchDelaySeconds": 3600,
+  "tasksRunning": 1,
+  "tasksHealthy": 1,
+  "tasksUnhealthy": 0,
+  "tasksStaged": 0,
+  "uris": [],
+  "dependencies": [ ],
+  "upgradeStrategy": {
+    "minimumHealthCapacity": 0.5,
+    "maximumOverCapacity": 0.2
+  },
+  "version": "1"
+}
