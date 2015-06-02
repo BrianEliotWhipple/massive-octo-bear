@@ -37,13 +37,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     d.pull_images "java:#{java_version}"
     d.pull_images "cassandra:#{cassandra_version}"
 
-    d.run 'cassandra:2.1',
-          args: '--name cassandra-1 -p 9042:9042',
-        daemonize: true
-
-    d.run 'registry:0.9.1',
-          args: '--name docker-registry -p 5000:5000',
-        daemonize: true
+# Optionally run docker containers
+#
+#    d.run 'cassandra:2.1',
+#      args: '--name cassandra-1 -p 9042:9042',
+#      daemonize: true
+#
+#    d.run 'registry:0.9.1',
+#      args: '--name docker-registry -p 5000:5000',
+#      daemonize: true
+#
+#    d.run 'google/cadvisor:latest',
+#      args: '--name cadvisor -p 80:8080',
+#      daemonize: true
 
   end
 

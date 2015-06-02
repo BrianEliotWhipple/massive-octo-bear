@@ -1,5 +1,5 @@
 {
-  "id": "/cassandra",
+  "id": "/example/db/cassandra",
   "container": {
     "type": "DOCKER",
     "docker": {
@@ -8,7 +8,7 @@
       "portMappings": [
         {
           "containerPort": 9042,
-          "hostPort": 0,
+          "hostPort": 9042,
           "servicePort": 9042,
           "protocol": "tcp"
         }

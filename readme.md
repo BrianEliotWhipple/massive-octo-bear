@@ -20,14 +20,13 @@ The Vagrant boxes will install the following images using the Vagrant Docker pro
 * java:8 - Base Java image, can switch to Java 7
 * cassandra:2.1 - Base Cassandra image, can switch to 2.0
 
-The Vagrant Docker provisioner will also run the Cassandra image, name it *cassandra-1* and
-expose the CQL port 9042 on the local host.
+Optionally, the Vagrant Docker provisioner will also run the Cassandra image,
+name it *cassandra-1* and expose the CQL port 9042 on the local host.
 
 Each of the different host OS virtual machines use a different private network:
 
  * CoreOS Vagrant box uses *192.168.10.100*
- * CentosOS Vagrant box uses *192.168.11.100*
- * Ubuntu Vagrant box uses *192.168.12.100* 
+ * CentosOS and Ubuntu Vagrant boxes uses *192.168.12.100*
 
 ## Service Projects
 
@@ -128,9 +127,9 @@ Once the vagrant box is running, Casandara and the Java Echo service can be run 
 
 After the Marathon apps have been created you can use the Echo service:
 
-* ```curl localhost:30001/echo```
+* ```curl localhost:30000/echo```
 
-The port 30001 is used since Marathon is already using the port 8080.
+The port 30000 is used since Marathon is already using the port 8080.
 
 ## Tool Dependencies
 

@@ -1,5 +1,5 @@
 {
-  "id": "/example/echo-service",
+  "id": "/example/service/echo",
   "container": {
     "type": "DOCKER",
     "docker": {
@@ -8,13 +8,13 @@
       "portMappings": [
         {
           "containerPort": 8080,
-          "hostPort": 31001,
+          "hostPort": 31000,
           "servicePort": 0,
           "protocol": "tcp"
         },
         {
           "containerPort": 8081,
-          "hostPort": 31002,
+          "hostPort": 31001,
           "servicePort": 0,
           "protocol": "tcp"
         }
@@ -35,6 +35,14 @@
   "acceptedResourceRoles": [ ],
   "labels": { },
   "healthChecks": [
+    {
+      "protocol": "HTTP",
+      "portIndex": 1,
+      "path": "/healthcheck",
+      "gracePeriodSeconds": 5,
+      "intervalSeconds": 20,
+      "maxConsecutiveFailures": 3
+    }
   ],
   "instances": 1,
   "ports": [],
@@ -46,7 +54,9 @@
   "tasksUnhealthy": 0,
   "tasksStaged": 0,
   "uris": [],
-  "dependencies": [ ],
+  "dependencies": [
+    "/example/db/cassandra"
+  ],
   "upgradeStrategy": {
     "minimumHealthCapacity": 0.5,
     "maximumOverCapacity": 0.2

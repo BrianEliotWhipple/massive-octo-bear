@@ -14,6 +14,7 @@ sudo apt-get -y install mesos marathon
 
 echo 'docker,mesos' > /etc/mesos-slave/containerizers
 echo '5mins' > /etc/mesos-slave/executor_registration_timeout
+echo 'ports(*):[5000-10000, 31000-32000]' > /etc/mesos-slave/resources
 
 sudo service zookeeper restart
 sudo service mesos-master start

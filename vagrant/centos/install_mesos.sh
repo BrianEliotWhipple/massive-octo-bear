@@ -12,6 +12,7 @@ sudo zookeeper-server-initialize --myid=1
 
 echo 'docker,mesos' > /etc/mesos-slave/containerizers
 echo '5mins' > /etc/mesos-slave/executor_registration_timeout
+echo 'ports(*):[5000-10000, 31000-32000]' > /etc/mesos-slave/resources
 
 sudo zookeeper-server start
 sudo service mesos-master start
