@@ -8,15 +8,9 @@ Vagrant.require_version ">= 1.6.0"
 CLOUD_CONFIG_PATH = File.join(File.dirname(__FILE__), "user-data")
 CONFIG = File.join(File.dirname(__FILE__), "config.rb")
 
-# Can be 7 or 8
-java_version = '8'
-
-# Can be 2.0 or 2.1
-cassandra_version = '2.1'
-
 # Defaults for config options defined in CONFIG
 $num_instances = 1
-$instance_name_prefix = "coreos"
+$instance_name_prefix = "core"
 $update_channel = "alpha"
 $enable_serial_logging = false
 $share_home = false
@@ -57,6 +51,12 @@ Vagrant.configure("2") do |config|
   config.vm.box_version = ">= 308.0.1"
   config.vm.box_url = "http://%s.release.core-os.net/amd64-usr/current/coreos_production_vagrant.json" % $update_channel
 
+  ["vmware_fusion", "vmware_workstation"].each do |vmware|
+    config.vm.provider vmware do |v, override|
+      override.vm.box_url = "http://%s.release.core-os.net/amd64-usr/current/coreos_production_vagrant_vmware_fusion.json" % $update_channel
+    end
+  end
+
   config.vm.provider :virtualbox do |v|
     # On VirtualBox, we don't have guest additions or a functional vboxsf
     # in CoreOS, so tell Vagrant that so it can be smarter.
@@ -80,6 +80,15 @@ Vagrant.configure("2") do |config|
         serialFile = File.join(logdir, "%s-serial.txt" % vm_name)
         FileUtils.touch(serialFile)
 
+        ["vmware_fusion", "vmware_workstation"].each do |vmware|
+          config.vm.provider vmware do |v, override|
+            v.vmx["serial0.present"] = "TRUE"
+            v.vmx["serial0.fileType"] = "file"
+            v.vmx["serial0.fileName"] = serialFile
+            v.vmx["serial0.tryNoRxLoss"] = "FALSE"
+          end
+        end
+
         config.vm.provider :virtualbox do |vb, override|
           vb.customize ["modifyvm", :id, "--uart1", "0x3F8", "4"]
           vb.customize ["modifyvm", :id, "--uartmode1", serialFile]
@@ -94,13 +103,21 @@ Vagrant.configure("2") do |config|
         config.vm.network "forwarded_port", guest: guest, host: host, auto_correct: true
       end
 
+      ["vmware_fusion", "vmware_workstation"].each do |vmware|
+        config.vm.provider vmware do |v|
+          v.gui = vm_gui
+          v.vmx['memsize'] = vm_memory
+          v.vmx['numvcpus'] = vm_cpus
+        end
+      end
+
       config.vm.provider :virtualbox do |vb|
         vb.gui = vm_gui
         vb.memory = vm_memory
         vb.cpus = vm_cpus
       end
 
-      ip = "192.168.10.#{i+100}"
+      ip = "172.17.8.#{i+99}"
       config.vm.network :private_network, ip: ip
 
       # Uncomment below to enable NFS for sharing the host machine into the coreos-vagrant VM.

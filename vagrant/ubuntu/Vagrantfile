@@ -15,7 +15,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  config.vm.network 'private_network', ip: '192.168.12.100'
+  config.vm.network 'private_network', ip: '172.17.8.10'
   config.vm.synced_folder '../../services', '/services'
 
   config.vm.provider 'virtualbox' do |vb|
@@ -26,7 +26,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.provision 'shell',
-    inline: 'sudo echo DOCKER_OPTS=\\"\\$DOCKER_OPTS --insecure-registry 192.168.0.0/16\\" >> /etc/default/docker'
+    inline: 'sudo echo DOCKER_OPTS=\\"\\$DOCKER_OPTS --insecure-registry 172.17.8.0/24\\" >> /etc/default/docker'
 
   config.vm.provision 'docker', version: '1.6.2'
 
@@ -55,5 +55,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision 'shell', path: 'install_local_docker_images.sh'
   config.vm.provision 'shell', path: 'install_mesos.sh'
-
+  config.vm.provision 'shell', path: 'install_deis_workstation.sh'
 end
