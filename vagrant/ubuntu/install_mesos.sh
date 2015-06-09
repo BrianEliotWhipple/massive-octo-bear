@@ -24,5 +24,5 @@ sudo service marathon start
 
 curl -sSfL http://downloads.mesosphere.io/chronos/chronos-2.1.0_mesos-0.14.0-rc4.tgz --output chronos.tgz
 tar xzf chronos.tgz && cd chronos
-./bin/start-chronos.bash --master zk://localhost:2181/mesos --zk_hosts zk://localhost:2181/mesos --http_port 8081 </dev/null &>/dev/null &
+./bin/start-chronos.bash --master zk://localhost:2181/mesos --zk_hosts zk://localhost:2181/mesos --http_port 8081  &>/dev/null &
 
