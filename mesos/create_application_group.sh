@@ -8,5 +8,6 @@ else
     exit 1
 fi
 
+curl -X DELETE http://${marathon_host}:8080/v2/groups/example
 
 curl -X POST -H "Content-Type: application/json" --data @example_app_group.json http://${marathon_host}:8080/v2/groups
