@@ -1,0 +1,40 @@
+# VM platform can be 'ubuntu' or 'centos'
+#vm_platform: ubuntu
+vm_platform: centos
+
+docker:
+  version: 1.6.2
+  ip_address: 172.17.8.10
+  install_service_images: true
+  install_mesos: true
+  install_images:
+    - name: registry
+      tag:  0.9.1
+    - name: google/cadvisor
+      tag: latest
+    - name: debian
+      tag: jessie
+    - name: java
+      tag: 8
+    - name: cassandra
+      tag: 2.1
+  run_images:
+    - name: cassandra
+      tag: 2.1
+      args: --name cassandra-1 -p 9042:9042
+    - name: registry
+      tag:  0.9.1
+      args: --name docker-registry -p 5000:5000
+    - name: google/cadvisor
+      tag: latest
+      args: --name cadvisor -p 9999:8080
+
+deis:
+  ip_address: 172.17.8.11
+  install_platform: false
+
+ubuntu:
+  box: ubuntu/trusty64
+
+centos:
+  box: chef/centos-7.1   # Centos 7.0 had problems with Vagrant Docker provisioner

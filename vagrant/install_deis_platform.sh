@@ -1,5 +1,8 @@
 #!/bin/sh
 
+eval `ssh-agent -s`
+ssh-add ~/insecure_private_key
+
 deisctl --tunnel=local3.deisapp.com config platform set sshPrivateKey=~/insecure_private_key
 deisctl --tunnel=local3.deisapp.com config platform set domain=local3.deisapp.com
 deisctl --tunnel=local3.deisapp.com refresh-units
