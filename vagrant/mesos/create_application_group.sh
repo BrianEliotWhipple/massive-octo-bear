@@ -1,12 +1,7 @@
 #!/bin/sh
 
-if [ "$1" != "" ]; then
-    marathon_host="$1"
-    echo "Creating apps on marathon host: ${marathon_host}"
-else
-    echo "Marathon hostname or ip address is required."
-    exit 1
-fi
+marathon_host="172.17.8.11"
+echo "Creating apps on marathon host: ${marathon_host}"
 
 curl -X DELETE http://${marathon_host}:8080/v2/groups/example
 

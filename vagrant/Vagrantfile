@@ -12,60 +12,90 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.box = vm_config[vm_platform]['box']
 
-  config.vm.define :docker do | docker |
+  config.vm.define :deis_workstation do | deis_workstation |
 
-    docker.vm.network 'private_network', ip: vm_config['docker']['ip_address']
-    docker.vm.synced_folder '../services', '/services'
+    deis_workstation.vm.network 'private_network', ip: vm_config['deis_workstation']['ip_address']
 
-    docker.vm.provider 'virtualbox' do | vb |
+    deis_workstation.vm.provider 'virtualbox' do | vb |
+      vb.memory = 1024
+      vb.cpus = 2
+    end
+
+    deis_workstation.vm.provision 'shell', path: 'deis/install_deis_workstation.sh'
+
+    if vm_config['deis_workstation']['install_deis_platform']
+      deis_workstation.vm.provision 'shell', path:  'deis/install_deis_platform.sh'
+    end
+
+  end
+
+  config.vm.define :mesos do | mesos |
+
+    mesos.vm.network 'private_network', ip: vm_config['mesos']['ip_address']
+    mesos.vm.synced_folder '../services', '/services'
+
+    mesos.vm.provider 'virtualbox' do | vb |
       vb.memory = 4096
       vb.cpus = 4
     end
 
-    docker.vm.provision 'shell', path: "#{vm_platform}/pre_docker_install.sh"
+    mesos.vm.provision 'shell', path: "#{vm_platform}/pre_docker_install.sh"
 
-    docker.vm.provision 'docker', version: vm_config['docker']['version']
+    mesos.vm.provision 'docker', version: vm_config['mesos']['docker_version']
 
-    vm_config['docker']['install_images'].each do | image |
-      docker.vm.provision 'docker', images: [ "#{image['name']}:#{image['tag']}" ]
+    vm_config['mesos']['install_images'].each do | image |
+      mesos.vm.provision 'docker', images: [ "#{image['name']}:#{image['tag']}" ]
     end
 
-    docker.vm.provision 'shell', path: "#{vm_platform}/post_docker_install.sh"
+    mesos.vm.provision 'shell', path: "#{vm_platform}/post_docker_install.sh"
 
 
-    vm_config['docker']['run_images'].each do | image |
-      docker.vm.provision 'docker' do | d |
+    vm_config['mesos']['run_images'].each do | image |
+      mesos.vm.provision 'docker' do | d |
         d.run "#{image['name']}:#{image['tag']}",
           args: "#{image['args']}",
           daemonize: true
       end
     end
 
-    if vm_config['docker']['install_service_images']
-      docker.vm.provision 'shell', path: 'install_local_docker_images.sh'
+    if vm_config['mesos']['install_service_images']
+      mesos.vm.provision 'shell', path: 'install_local_docker_images.sh'
     end
 
-    if vm_config['docker']['install_mesos']
-      docker.vm.provision 'shell', path:  "#{vm_platform}/install_mesos.sh"
-    end
+    mesos.vm.provision 'shell', path:  "#{vm_platform}/install_mesos.sh"
 
   end
 
-  config.vm.define :deis do | deis |
+  config.vm.define :gocd do | gocd |
 
-    deis.vm.network 'private_network', ip: vm_config['deis']['ip_address']
+    gocd.vm.network 'private_network', ip: vm_config['gocd']['ip_address']
+    gocd.vm.synced_folder '../services', '/services'
 
-    deis.vm.provider 'virtualbox' do | vb |
-      vb.memory = 1024
-      vb.cpus = 2
+    gocd.vm.provider 'virtualbox' do | vb |
+      vb.memory = 4096
+      vb.cpus = 4
     end
 
-    config.vm.provision 'shell', path: 'install_deis_workstation.sh'
+    gocd.vm.provision 'shell', path: "#{vm_platform}/pre_docker_install.sh"
 
-    if vm_config['deis']['install_platform']
-      docker.vm.provision 'shell', path:  'install_deis_platform.sh'
+    gocd.vm.provision 'docker', version: vm_config['gocd']['docker_version']
+
+    vm_config['gocd']['install_images'].each do | image |
+      gocd.vm.provision 'docker', images: [ "#{image['name']}:#{image['tag']}" ]
     end
+
+    gocd.vm.provision 'shell', path: "#{vm_platform}/post_docker_install.sh"
+
+
+    vm_config['gocd']['run_images'].each do | image |
+      gocd.vm.provision 'docker' do | d |
+        d.run "#{image['name']}:#{image['tag']}",
+              args: "#{image['args']}",
+            daemonize: true
+      end
+    end
+
+    gocd.vm.provision 'shell', path:  "#{vm_platform}/install_gocd.sh"
 
   end
-
 end
