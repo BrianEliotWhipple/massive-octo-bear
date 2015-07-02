@@ -10,8 +10,7 @@ fi
 
 docker build -t example/gocd-agent-java-8:0.1 -f Dockerfile.gocd-agent-java-8 .
 
-docker tag example/gocd-agent-java-8:0.1 ${docker_registry_url}/example/gocd-agent-java
--8:0.1
+docker tag example/gocd-agent-java-8:0.1 ${docker_registry_url}/example/gocd-agent-java-8:0.1
 
 docker push ${docker_registry_url}/example/gocd-agent-java-8:0.1
 
