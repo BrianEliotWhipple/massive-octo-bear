@@ -24,7 +24,7 @@ mesos:
   run_images:
     - name: google/cadvisor
       tag: latest
-      args: --name cadvisor -p 9999:8080
+      args:--volume=/:/rootfs:ro --volume=/var/run:/var/run:rw --volume=/sys:/sys:ro --volume=/var/lib/docker/:/var/lib/docker:ro --publish=9999:8080 --privileged=true --volume=/cgroup:/cgroup:ro --name=cadvisor
 
 gocd:
   ip_address: 172.17.8.12
@@ -46,4 +46,4 @@ gocd:
       args: --name docker-registry -p 5000:5000
     - name: google/cadvisor
       tag: latest
-      args: --volume=/:/rootfs:ro --volume=/var/run:/var/run:rw --volume=/sys:/sys:ro --volume=/var/lib/docker/:/var/lib/docker:ro --publish=9999:8080 --privileged=true and --volume=/cgroup:/cgroup:ro --name=cadvisor
+      args: --volume=/:/rootfs:ro --volume=/var/run:/var/run:rw --volume=/sys:/sys:ro --volume=/var/lib/docker/:/var/lib/docker:ro --publish=9999:8080 --privileged=true --volume=/cgroup:/cgroup:ro --name=cadvisor

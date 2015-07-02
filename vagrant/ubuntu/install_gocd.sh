@@ -33,3 +33,6 @@ sudo chown go /var/lib/go-agent/config/autoregister.properties
 sudo chgrp go /var/lib/go-agent/config/autoregister.properties
 
 sudo service go-agent start
+
+sudo usermod -a -G docker go
+sudo service docker restart

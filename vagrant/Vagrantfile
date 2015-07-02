@@ -76,6 +76,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       vb.cpus = 4
     end
 
+
     gocd.vm.provision 'shell', path: "#{vm_platform}/pre_docker_install.sh"
 
     gocd.vm.provision 'docker', version: vm_config['gocd']['docker_version']
@@ -86,6 +87,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     gocd.vm.provision 'shell', path: "#{vm_platform}/post_docker_install.sh"
 
+    # Install GoCD before running docker images since docker will need to be restarted.
+    gocd.vm.provision 'shell', path:  "#{vm_platform}/install_gocd.sh"
 
     vm_config['gocd']['run_images'].each do | image |
       gocd.vm.provision 'docker' do | d |
@@ -94,8 +97,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             daemonize: true
       end
     end
-
-    gocd.vm.provision 'shell', path:  "#{vm_platform}/install_gocd.sh"
 
   end
 end
