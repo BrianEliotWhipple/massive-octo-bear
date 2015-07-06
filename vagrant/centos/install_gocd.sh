@@ -21,15 +21,18 @@ sudo service go-server restart
 
 yum install -y go-agent
 
-sudo service go-agent start
-
 echo "Setting up autoregister file"
+
+sudo mkdir -p /var/lib/go-agent/config
+sudo chown go /var/lib/go-agent/config
+sudo chgrp go /var/lib/go-agent/config
 
 sudo cp /vagrant/gocd/docker-agent.autoregister.properties /var/lib/go-agent/config/autoregister.properties
 sudo chown go /var/lib/go-agent/config/autoregister.properties
 sudo chgrp go /var/lib/go-agent/config/autoregister.properties
+sudo chmod 0644  /var/lib/go-agent/config/autoregister.properties
 
 sudo usermod -a -G docker go
 sudo service docker restart
 
-sudo service go-agent restart
+sudo service go-agent start
