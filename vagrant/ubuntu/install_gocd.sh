@@ -9,7 +9,7 @@ apt-get install git
 
 apt-get install -y go-server
 
-sudo cp /vagrant/cruise-config.xml /etc/go/cruise-config.xml
+sudo cp /vagrant/gocd/cruise-config.xml /etc/go/cruise-config.xml
 chown go /etc/go/cruise-config.xml
 chgrp go /etc/go/cruise-config.xml
 
@@ -19,16 +19,7 @@ apt-get install -y go-agent
 
 echo "Setting up autoregister file"
 
-sudo touch /var/lib/go-agent/config/autoregister.properties
-sudo chown vagrant /var/lib/go-agent/config/autoregister.properties
-
-cat <<EOL >/var/lib/go-agent/config/autoregister.properties
-agent.auto.register.key=123abc123abc123abc
-agent.auto.register.resources=docker
-#agent.auto.register.environments=
-#agent.auto.register.hostname=
-EOL
-
+sudo cp /vagrant/gocd/docker-agent.autoregister.properties /var/lib/go-agent/config/autoregister.properties
 sudo chown go /var/lib/go-agent/config/autoregister.properties
 sudo chgrp go /var/lib/go-agent/config/autoregister.properties
 

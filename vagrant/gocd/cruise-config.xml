@@ -16,6 +16,9 @@
                 <runif status="passed" />
               </exec>
             </tasks>
+            <resources>
+              <resource>docker</resource>
+            </resources>
           </job>
         </jobs>
       </stage>
@@ -29,6 +32,9 @@
                 <runif status="passed" />
               </exec>
             </tasks>
+            <resources>
+              <resource>docker</resource>
+            </resources>
           </job>
         </jobs>
       </stage>
@@ -55,7 +61,6 @@
             </environmentvariables>
             <tasks>
               <exec command="./gradlew" workingdir="services/java/echo">
-                <arg>--debug</arg>
                 <arg>shadowJar</arg>
                 <runif status="passed" />
               </exec>
