@@ -9,7 +9,17 @@ gpgcheck        = 0
 " > /etc/yum.repos.d/thoughtworks-go.repo
 
 yum install -y git
-yum install -y java-1.7.0-openjdk
+
+# Install Oracle Java - GoCD artifact uploading fails if not using Oracle Java and server and agent
+cd /opt
+sudo wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; \
+  oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/7u80-b15/jdk-7u80-linux-x64.tar.gz"
+sudo tar xvf jdk-7u80-linux-x64.tar.gz
+sudo chown -R root: jdk1.7.0_80/
+sudo alternatives --install /usr/bin/java java /opt/jdk1.7.0_80/bin/java 1
+sudo alternatives --install /usr/bin/javac javac /opt/jdk1.7.0_80/bin/javac 1
+sudo alternatives --install /usr/bin/jar jar /opt/jdk1.7.0_80/bin/jar 1
+sudo sh -c "echo export JAVA_HOME=/opt/jdk1.7.0_80 >> /etc/environment"
 
 yum install -y go-server
 
