@@ -1,45 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <cruise xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="cruise-config.xsd" schemaVersion="75">
   <server artifactsdir="artifacts" agentAutoRegisterKey="123abc123abc123abc" commandRepositoryLocation="default"  />
-  <pipelines group="GoCDAgentPipelines">
-    <pipeline name="AgentPipeline" isLocked="false">
-      <materials>
-        <git url="https://github.com/BrianEliotWhipple/massive-octo-bear.git" autoUpdate="false" />
-      </materials>
-      <stage name="BuildAgents">
-        <approval type="manual" />
-        <jobs>
-          <job name="BuildAgents">
-            <tasks>
-              <exec command="./buildAndPublishAgents.sh" workingdir="agents">
-                <arg>172.17.8.12:5000</arg>
-                <runif status="passed" />
-              </exec>
-            </tasks>
-            <resources>
-              <resource>docker</resource>
-            </resources>
-          </job>
-        </jobs>
-      </stage>
-      <stage name="RunAgents">
-        <jobs>
-          <job name="RunAgents">
-            <tasks>
-              <exec command="./runAgents.sh" workingdir="agents">
-                <arg>172.17.8.12</arg>
-                <arg>172.17.8.12:5000</arg>
-                <runif status="passed" />
-              </exec>
-            </tasks>
-            <resources>
-              <resource>docker</resource>
-            </resources>
-          </job>
-        </jobs>
-      </stage>
-    </pipeline>
-  </pipelines>
   <pipelines group="ServicePipelines">
     <pipeline name="BuildEchoService" isLocked="false">
       <materials>
@@ -75,19 +36,77 @@
         </jobs>
       </stage>
     </pipeline>
-    <pipeline name="BuildEchoServiceDockerImage">
+    <pipeline name="BuildAndPublishEchoServiceDockerImage">
       <materials>
         <git url="https://github.com/BrianEliotWhipple/massive-octo-bear.git" autoUpdate="false" />
         <pipeline pipelineName="BuildEchoService" stageName="BuildService" materialName="EchoServiceArtifact" />
       </materials>
-      <stage name="BuildDockerImage">
+      <stage name="BuildAndPublishDockerImage">
         <jobs>
-          <job name="BuildDockerImage">
+          <job name="BuildAndPublishDockerImage">
             <tasks>
               <fetchartifact pipeline="BuildEchoService" stage="BuildService" job="BuildService" srcdir="build/libs" dest="services/java/echo/build/">
                 <runif status="passed" />
               </fetchartifact>
               <exec command="./docker_build.sh" workingdir="services/java/echo" />
+              <exec command="./docker_publish.sh" workingdir="services/java/echo">
+                <arg>172.17.8.12:5000</arg>
+                <runif status="passed" />
+              </exec>
+            </tasks>
+            <resources>
+              <resource>docker</resource>
+            </resources>
+          </job>
+        </jobs>
+      </stage>
+    </pipeline>
+    <pipeline name="DeployEchoServiceToMesos">
+      <materials>
+        <pipeline pipelineName="BuildAndPublishEchoServiceDockerImage" stageName="BuildAndPublishDockerImage" />
+        <git url="https://github.com/BrianEliotWhipple/massive-octo-bear.git" autoUpdate="false" materialName="Source" />
+      </materials>
+      <stage name="defaultStage">
+        <jobs>
+          <job name="defaultJob">
+            <tasks>
+              <exec command="./create_application_group.sh" workingdir="mesos" />
+            </tasks>
+          </job>
+        </jobs>
+      </stage>
+    </pipeline>
+  </pipelines>
+  <pipelines group="GoCDAgentPipelines">
+    <pipeline name="AgentPipeline" isLocked="false">
+      <materials>
+        <git url="https://github.com/BrianEliotWhipple/massive-octo-bear.git" autoUpdate="false" />
+      </materials>
+      <stage name="BuildAgents">
+        <approval type="manual" />
+        <jobs>
+          <job name="BuildAgents">
+            <tasks>
+              <exec command="./buildAndPublishAgents.sh" workingdir="agents">
+                <arg>172.17.8.12:5000</arg>
+                <runif status="passed" />
+              </exec>
+            </tasks>
+            <resources>
+              <resource>docker</resource>
+            </resources>
+          </job>
+        </jobs>
+      </stage>
+      <stage name="RunAgents">
+        <jobs>
+          <job name="RunAgents">
+            <tasks>
+              <exec command="./runAgents.sh" workingdir="agents">
+                <arg>172.17.8.12</arg>
+                <arg>172.17.8.12:5000</arg>
+                <runif status="passed" />
+              </exec>
             </tasks>
             <resources>
               <resource>docker</resource>

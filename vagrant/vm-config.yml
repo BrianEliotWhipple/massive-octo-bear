@@ -9,13 +9,16 @@ centos:
   box: chef/centos-7.1   # Centos 7.0 had problems with Vagrant Docker provisioner
 
 deis_workstation:
+  memory: 1024
+  cpus: 2
   ip_address: 172.17.8.10
   install_deis_platform: false
 
 mesos:
   ip_address: 172.17.8.11
+  memory: 4096
+  cpus: 4
   docker_version: 1.6.2
-  install_service_images: true
   install_images:
     - name: google/cadvisor
       tag: latest
@@ -28,6 +31,8 @@ mesos:
 
 gocd:
   ip_address: 172.17.8.12
+  memory: 2048
+  cpus: 2
   docker_version: 1.6.2
   install_images:
     - name: gocd/gocd-agent

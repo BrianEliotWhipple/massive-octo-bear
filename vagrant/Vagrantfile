@@ -17,8 +17,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     deis_workstation.vm.network 'private_network', ip: vm_config['deis_workstation']['ip_address']
 
     deis_workstation.vm.provider 'virtualbox' do | vb |
-      vb.memory = 1024
-      vb.cpus = 2
+      vb.memory = vm_config['deis_workstation']['memory']
+      vb.cpus = vm_config['deis_workstation']['cpus']
     end
 
     deis_workstation.vm.provision 'shell', path: 'deis/install_deis_workstation.sh'
@@ -35,8 +35,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     mesos.vm.synced_folder '../services', '/services'
 
     mesos.vm.provider 'virtualbox' do | vb |
-      vb.memory = 4096
-      vb.cpus = 4
+      vb.memory = vm_config['mesos']['memory']
+      vb.cpus = vm_config['mesos']['cpus']
     end
 
     mesos.vm.provision 'shell', path: "#{vm_platform}/pre_docker_install.sh"
@@ -58,10 +58,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end
     end
 
-    if vm_config['mesos']['install_service_images']
-      mesos.vm.provision 'shell', path: 'install_local_docker_images.sh'
-    end
-
     mesos.vm.provision 'shell', path:  "#{vm_platform}/install_mesos.sh"
 
   end
@@ -72,8 +68,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     gocd.vm.synced_folder '../services', '/services'
 
     gocd.vm.provider 'virtualbox' do | vb |
-      vb.memory = 4096
-      vb.cpus = 4
+      vb.memory = vm_config['gocd']['memory']
+      vb.cpus = vm_config['gocd']['cpus']
     end
 
 

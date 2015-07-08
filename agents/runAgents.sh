@@ -17,3 +17,4 @@ else
 fi
 
 docker run -d -e GO_SERVER=${go_server_host} --name gocd-agent-java-8 ${docker_registry_url}/example/gocd-agent-java-8:0.1
+docker run -d -e GO_SERVER=${go_server_host} --name gocd-agent-cucumber ${docker_registry_url}/example/gocd-agent-cucumber:0.1
