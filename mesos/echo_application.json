@@ -3,7 +3,7 @@
   "container": {
     "type": "DOCKER",
     "docker": {
-      "image": "example/java-echo:0.1",
+      "image": "172.17.8.12:5000/example/java-echo:0.1",
       "network": "BRIDGE",
       "portMappings": [
         {
