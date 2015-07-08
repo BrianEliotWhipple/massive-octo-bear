@@ -11,7 +11,7 @@
         <jobs>
           <job name="BuildAgents">
             <tasks>
-              <exec command="./buildAndPublishAgents.sh" workingdir="vagrant/agents">
+              <exec command="./buildAndPublishAgents.sh" workingdir="agents">
                 <arg>172.17.8.12:5000</arg>
                 <runif status="passed" />
               </exec>
@@ -26,7 +26,7 @@
         <jobs>
           <job name="RunAgents">
             <tasks>
-              <exec command="./runAgents.sh" workingdir="vagrant/agents">
+              <exec command="./runAgents.sh" workingdir="agents">
                 <arg>172.17.8.12</arg>
                 <arg>172.17.8.12:5000</arg>
                 <runif status="passed" />
