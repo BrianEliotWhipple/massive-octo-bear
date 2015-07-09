@@ -11,5 +11,5 @@ RUN sudo apt-get install -y ruby-full
 RUN gem install bundler
 RUN gem install cucumber
 
-RUN sudo apt-get remove --purge build-essential
-RUN sudo apt-get autoremove
+RUN sudo apt-get remove --purge -y  build-essential
+RUN sudo apt-get autoremove -y
