@@ -6,7 +6,10 @@ ENV AGENT_RESOURCES cucumber
 
 # Install Ruby
 RUN sudo apt-get update
+RUN sudo apt-get install -y build-essential
 RUN sudo apt-get install -y ruby-full
 RUN gem install bundler
 RUN gem install cucumber
 
+RUN sudo apt-get remove --purge build-essential
+RUN sudo apt-get autoremove
