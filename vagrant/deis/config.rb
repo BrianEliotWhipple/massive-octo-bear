@@ -61,7 +61,7 @@ end
 
 # Customize VMs
 #$vm_gui = false
-$vm_memory = 2048
+$vm_memory = 3072
 $vm_cpus = 2
 
 # Share additional folders to the CoreOS VMs
