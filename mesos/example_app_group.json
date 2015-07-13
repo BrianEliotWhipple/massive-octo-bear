@@ -31,7 +31,6 @@
           "env": { },
           "executor": "",
           "constraints": [ ],
-          "acceptedResourceRoles": [ ],
           "labels": { },
           "healthChecks": [ ],
           "instances": 1,
