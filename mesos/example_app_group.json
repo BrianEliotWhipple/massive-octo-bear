@@ -90,7 +90,6 @@
           "env": { },
           "executor": "",
           "constraints": [ ],
-          "acceptedResourceRoles": [ ],
           "labels": { },
           "healthChecks": [
             {
