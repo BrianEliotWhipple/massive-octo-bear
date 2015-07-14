@@ -6,4 +6,4 @@ ADD echo-service.yml /data/echo-service.yml
 
 CMD java -jar /data/echo-0.1-all.jar server /data/echo-service.yml
 
-EXPOSE 8080 8081
+EXPOSE 8080
