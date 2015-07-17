@@ -93,10 +93,10 @@
           "healthChecks": [
             {
               "protocol": "HTTP",
-              "portIndex": 0,
-              "path": "/log",
+              "portIndex": 1,
+              "path": "/healthcheck",
               "gracePeriodSeconds": 300,
-              "intervalSeconds": 300,
+              "intervalSeconds": 60,
               "maxConsecutiveFailures": 3
             }
           ],
