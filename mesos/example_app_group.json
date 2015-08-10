@@ -78,7 +78,7 @@
               ],
               "privileged": false,
               "parameters": [
-                { "key": "env", "value": "CASSANDRA_SEED_HOST=172.17.8.11" }
+                { "key": "env", "value": "CASSANDRA_SEED_HOST=172.17.8.10" }
               ]
             },
             "volumes": [ ]

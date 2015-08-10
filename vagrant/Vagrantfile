@@ -12,53 +12,69 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.box = vm_config[vm_platform]['box']
 
-  config.vm.define :deis_workstation do | deis_workstation |
+  config.vm.define :mesos_master do | mesos_master |
 
-    deis_workstation.vm.network 'private_network', ip: vm_config['deis_workstation']['ip_address']
+    mesos_master.vm.network 'private_network', ip: vm_config['mesos_master']['ip_address']
+    mesos_master.vm.synced_folder '../services', '/services'
 
-    deis_workstation.vm.provider 'virtualbox' do | vb |
-      vb.memory = vm_config['deis_workstation']['memory']
-      vb.cpus = vm_config['deis_workstation']['cpus']
+    mesos_master.vm.provider 'virtualbox' do | vb |
+      vb.memory = vm_config['mesos_master']['memory']
+      vb.cpus = vm_config['mesos_master']['cpus']
     end
 
-    deis_workstation.vm.provision 'shell', path: 'deis/install_deis_workstation.sh'
+    mesos_master.vm.provision 'shell', path: "#{vm_platform}/pre_docker_install.sh"
 
-    if vm_config['deis_workstation']['install_deis_platform']
-      deis_workstation.vm.provision 'shell', path:  'deis/install_deis_platform.sh'
+    mesos_master.vm.provision 'docker', version: vm_config['mesos_master']['docker_version']
+
+    vm_config['mesos_master']['install_images'].each do | image |
+      mesos_master.vm.provision 'docker', images: [ "#{image['name']}:#{image['tag']}" ]
     end
 
-  end
-
-  config.vm.define :mesos do | mesos |
-
-    mesos.vm.network 'private_network', ip: vm_config['mesos']['ip_address']
-    mesos.vm.synced_folder '../services', '/services'
-
-    mesos.vm.provider 'virtualbox' do | vb |
-      vb.memory = vm_config['mesos']['memory']
-      vb.cpus = vm_config['mesos']['cpus']
-    end
-
-    mesos.vm.provision 'shell', path: "#{vm_platform}/pre_docker_install.sh"
-
-    mesos.vm.provision 'docker', version: vm_config['mesos']['docker_version']
-
-    vm_config['mesos']['install_images'].each do | image |
-      mesos.vm.provision 'docker', images: [ "#{image['name']}:#{image['tag']}" ]
-    end
-
-    mesos.vm.provision 'shell', path: "#{vm_platform}/post_docker_install.sh"
+    mesos_master.vm.provision 'shell', path: "#{vm_platform}/post_docker_install.sh"
 
 
-    vm_config['mesos']['run_images'].each do | image |
-      mesos.vm.provision 'docker' do | d |
+    vm_config['mesos_master']['run_images'].each do | image |
+      mesos_master.vm.provision 'docker' do | d |
         d.run "#{image['name']}:#{image['tag']}",
           args: "#{image['args']}",
           daemonize: true
       end
     end
 
-    mesos.vm.provision 'shell', path:  "#{vm_platform}/install_mesos.sh"
+    mesos_master.vm.provision 'shell', path:  "#{vm_platform}/install_mesos_master.sh"
+
+  end
+
+  config.vm.define :mesos_slave do | mesos_slave |
+
+    mesos_slave.vm.network 'private_network', ip: vm_config['mesos_slave']['ip_address']
+    mesos_slave.vm.synced_folder '../services', '/services'
+
+    mesos_slave.vm.provider 'virtualbox' do | vb |
+      vb.memory = vm_config['mesos_slave']['memory']
+      vb.cpus = vm_config['mesos_slave']['cpus']
+    end
+
+    mesos_slave.vm.provision 'shell', path: "#{vm_platform}/pre_docker_install.sh"
+
+    mesos_slave.vm.provision 'docker', version: vm_config['mesos_slave']['docker_version']
+
+    vm_config['mesos_slave']['install_images'].each do | image |
+      mesos_slave.vm.provision 'docker', images: [ "#{image['name']}:#{image['tag']}" ]
+    end
+
+    mesos_slave.vm.provision 'shell', path: "#{vm_platform}/post_docker_install.sh"
+
+
+    vm_config['mesos_slave']['run_images'].each do | image |
+      mesos_slave.vm.provision 'docker' do | d |
+        d.run "#{image['name']}:#{image['tag']}",
+              args: "#{image['args']}",
+            daemonize: true
+      end
+    end
+
+    mesos_slave.vm.provision 'shell', path:  "#{vm_platform}/install_mesos_slave.sh"
 
   end
 
