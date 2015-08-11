@@ -1,6 +1,6 @@
 # VM platform can be 'ubuntu' or 'centos'
-vm_platform: ubuntu
-#vm_platform: centos
+#vm_platform: ubuntu
+vm_platform: centos
 
 ubuntu:
   box: ubuntu/trusty64

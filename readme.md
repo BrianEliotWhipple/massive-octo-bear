@@ -46,6 +46,15 @@ The pipeline will:
 
 *TODO* Add automated tests for the Echo service pipeline.
 
+### Docker Monitoring with cAdvisor
+
+All three virtual machines with Docker installed can be monitored with [cAdvisor](https://github.com/google/cadvisor).
+Once the virtual machines have been started, cAdvisor will be available at these URLs:
+
+* [GoCD Server cAdvisor](172.17.8.12:9999)
+* [Mesos Master cAdvisor](172.17.8.10:9999)
+* [Mesos Slave cAdvisor](172.17.8.11:9999)
+
 ## Service Projects
 
 Example micro-service projects can be found under ```/service/${language}``` directory.
