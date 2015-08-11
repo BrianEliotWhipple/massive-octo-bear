@@ -11,16 +11,23 @@ From the project's ```/vagrant``` directory run ```vagrant up```.  This command 
 * *mesos_slave* Apache Mesos will be installed and the vm configured as a Mesos slave node.
 * *gocd* GoCD server, a local GoCD agent, and Docker private registry will be installed on this vm.
 
-Once all virtual machines have been started, log into the GoCD server at http://172.17.8.12:8153.
-Apache Mesos should be available at http://172.17.8.10:5050 and there should be two slaves
-(172.17.8.10 and 172.17.8.11)
+Once all virtual machines have been started, the following applications are available:
+
+* [GoCD Server](http://172.17.8.12:8153)
+* [Apache Mesos](http://172.17.8.10:5050) Mesos should have two slave nodes: 172.17.8.10 and 172.17.8.11
+* [Apache Mesos Marathon Framework](http://172.17.8.10:8080)
+* [Apache Mesos Chronos Framework](http://172.17.8.10:8081)
+
+*Note* running all three virtual machines will consume 4G physical memory per virtual machine.  If you want to reduce
+the memory footprint, edit the ```/vagrant/vm-config.yml``` file and set the memory for each virtual machine.
+Running the examples with less memory may introduce errors.
 
 ### Build GoCD Agents
 
 Before the example service projects can be built and deployed, several GoCD agents will need to be built and
 registered as agents.  These agents are deployed as Docker containers on the GoCD virtual machine.
 
-Log into the GoCD server at http://http://172.17.8.12:8153 and run the *Agent Pipeline.*  After these jobs complete,
+Log into the [GoCD server](http://http://172.17.8.12:8153) and run the *Agent Pipeline.*  After these jobs complete,
 there should be GoCD agents with labels:
 
   * *Java8* This agent can be used for building projects that use Java version 8.
@@ -81,7 +88,7 @@ unexpected results.
 
 ### Workstation Host Platforms
 
-* Windows 7 (with msysGit Git Bash shell)
+* Windows 7 (with msysGit Bash shell)
 * Linux Ubuntu 15.04
 
 ### Local Virtual Machines
