@@ -1,0 +1,3 @@
+default: >
+  --format pretty --format html --out build/reports/acceptance-test-report.html
+  --format json --out build/reports/acceptance-test-report.json

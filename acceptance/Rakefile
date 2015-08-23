@@ -1,0 +1,20 @@
+require 'rubygems'
+require 'cucumber'
+require 'cucumber/rake/task'
+
+task :default => :run_acceptance_tests
+
+REPORTS_DIR = 'build/reports/'
+
+directory REPORTS_DIR
+
+task :run_acceptance_tests => REPORTS_DIR
+
+Cucumber::Rake::Task.new(:run_acceptance_tests) do | task |
+  task.cucumber_opts = if ENV['CUCUMBER_PROFILE'] then "--profile #{ENV['CUCUMBER_PROFILE']}" else "" end
+  task.cucumber_opts << if ENV['TAG'] then "-t #{ENV['TAG']}" end
+end
+
+task :clean do
+  rm_rf 'build'
+end

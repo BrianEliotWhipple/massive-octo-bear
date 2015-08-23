@@ -1,0 +1,9 @@
+source "http://rubygems.org"
+
+group(:test) do
+  gem 'cucumber'
+  gem 'syntax'
+  gem 'rake'
+  gem 'rspec-expectations'
+  gem 'rest-client'
+end
