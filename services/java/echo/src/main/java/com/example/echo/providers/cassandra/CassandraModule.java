@@ -7,6 +7,7 @@ import com.datastax.driver.core.Session;
 import com.example.echo.EchoConfiguration;
 import com.example.echo.providers.EchoMessageProvider;
 import com.example.echo.providers.SchemaBuilder;
+import com.example.echo.providers.SchemaCleaner;
 import dagger.Module;
 import dagger.Provides;
 import io.dropwizard.lifecycle.Managed;
@@ -18,6 +19,11 @@ public class CassandraModule {
     @Provides
     public SchemaBuilder providesSchemaBuilder(Session session) {
         return new CassandraSchemaBuilder(session);
+    }
+
+    @Provides
+    public SchemaCleaner providesSchemaCleaner(Session session) {
+        return new CassandraSchemaCleaner(session);
     }
 
     @Provides

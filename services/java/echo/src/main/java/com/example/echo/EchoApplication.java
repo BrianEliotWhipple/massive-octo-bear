@@ -2,6 +2,7 @@ package com.example.echo;
 
 import com.example.echo.providers.SchemaBuilder;
 import com.example.echo.resources.LogResource;
+import com.example.echo.tasks.CleanSchemaTask;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -38,6 +39,7 @@ public class EchoApplication extends Application<EchoConfiguration> {
             configuration);
         createSchema(echoComponent.getSchemaBuilder());
         registerResources(environment, echoComponent);
+        registerTasks(environment, echoComponent);
         registerHealthChecks(environment);
     }
 
@@ -57,4 +59,8 @@ public class EchoApplication extends Application<EchoConfiguration> {
         environment.healthChecks().register("available", healthCheck);
     }
 
+    private void registerTasks(Environment environment, EchoComponent echoComponent) {
+        CleanSchemaTask cleanSchemaTask = new CleanSchemaTask(echoComponent.getSchemaCleaner());
+        environment.admin().addTask(cleanSchemaTask);
+    }
 }

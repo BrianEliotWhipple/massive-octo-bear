@@ -8,3 +8,4 @@ require 'rest_client'
 # Application Driver implementation
 require 'runtime_configuration'
 require 'echo_service'
+require 'admin_tasks'

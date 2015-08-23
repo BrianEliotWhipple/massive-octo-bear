@@ -1,8 +1,9 @@
 package com.example.echo;
 
 import com.example.echo.providers.EchoMessageProvider;
-import com.example.echo.providers.cassandra.CassandraModule;
+import com.example.echo.providers.SchemaCleaner;
 import com.example.echo.providers.SchemaBuilder;
+import com.example.echo.providers.cassandra.CassandraModule;
 import dagger.Component;
 import io.dropwizard.setup.Environment;
 
@@ -13,6 +14,7 @@ import javax.inject.Singleton;
 public interface EchoComponent {
 
     SchemaBuilder getSchemaBuilder();
+    SchemaCleaner getSchemaCleaner();
     EchoMessageProvider getEchoMessageProvider();
 
     public static EchoComponent createEchoComponent(Environment env, EchoConfiguration config) {

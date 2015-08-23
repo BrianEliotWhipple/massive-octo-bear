@@ -1,9 +1,14 @@
 
-@echo
-Feature: Echo REST request messages
+@log
+Feature: Query all the logged echo messages.
 
-  Client invocation of the Echo Service will receive an echo response message.
+  Client can request a log of all echo messages processed by the echo service.
 
-  Scenario:  Sending a Hello World echo request will receive a Hello World response.
+  Scenario:  Requesting the echo message logs returns a request will all logged echo messages.
     Given An echo message of "Hello World" is sent to the echo service
-    Then A response message will echo the "Hello World" message
+    And An echo message of "Goodbye World" is sent to the echo service
+    And An echo message of "Ciao World" is sent to the echo service
+    Then Requesting the echo logs will return the logged messages:
+      | Hello World   |
+      | Goodbye World |
+      | Ciao World    |
