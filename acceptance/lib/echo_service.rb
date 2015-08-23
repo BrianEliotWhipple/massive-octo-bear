@@ -22,6 +22,6 @@ def request_echo_logs
 end
 
 def validate_echo_logs(actual_response, expected_messages)
-  puts actual_response
-  puts expected_messages
+  puts actual_response.class
+  puts expected_message.class
 end
