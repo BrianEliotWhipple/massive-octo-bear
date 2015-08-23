@@ -16,8 +16,8 @@ docker rmi example/gocd-agent-java-8:0.1
 docker rmi ${docker_registry_url}/example/gocd-agent-java-8:0.1
 
 # Cucumber Agent
-docker build -t example/gocd-agent-cucumber:0.1 -f Dockerfile.gocd-agent-cucumber .
-docker tag -f example/gocd-agent-cucumber:0.1 ${docker_registry_url}/example/gocd-agent-cucumber:0.1
-docker push ${docker_registry_url}/example/gocd-agent-cucumber:0.1
-docker rmi example/gocd-agent-cucumber:0.1
-docker rmi ${docker_registry_url}/example/gocd-agent-cucumber:0.1
+docker build -t example/gocd-agent-ruby:0.1 -f Dockerfile.gocd-agent-ruby .
+docker tag -f example/gocd-agent-ruby:0.1 ${docker_registry_url}/example/gocd-agent-ruby:0.1
+docker push ${docker_registry_url}/example/gocd-agent-ruby:0.1
+docker rmi example/gocd-agent-ruby:0.1
+docker rmi ${docker_registry_url}/example/gocd-agent-ruby:0.1
