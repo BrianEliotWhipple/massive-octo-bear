@@ -21,7 +21,8 @@ def request_echo_logs
   JSON.parse(response.body.to_s)
 end
 
-def validate_echo_logs(actual_response, expected_messages)
-  puts actual_response.class
-  puts expected_message.class
+def validate_echo_logs(actual_response, expected_message_table)
+  expected_messages = expected_message_table.raw.flatten
+  actual_messages = actual_response.collect { | msg | msg['message']}
+  expect(actual_messages).to match_array(expected_messages)
 end
