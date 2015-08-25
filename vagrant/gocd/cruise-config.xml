@@ -45,7 +45,7 @@
         <jobs>
           <job name="BuildAndPublishDockerImage">
             <tasks>
-              <fetchartifact pipeline="BuildEchoService" stage="BuildService" job="BuildService" srcdir="build/libs" dest="services/java/echo/build/">
+              <fetchartifact pipeline="EchoServiceBuild" stage="BuildService" job="BuildService" srcdir="build/libs" dest="services/java/echo/build/">
                 <runif status="passed" />
               </fetchartifact>
               <exec command="./docker_build.sh" workingdir="services/java/echo" />
@@ -104,7 +104,8 @@
             </artifacts>
           </job>
         </jobs>
-      </stage>    </pipeline>
+      </stage>
+    </pipeline>
   </pipelines>
   <pipelines group="GoCDAgentPipelines">
     <pipeline name="DeployAgents" isLocked="false">
