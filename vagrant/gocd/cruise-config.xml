@@ -39,7 +39,7 @@
     <pipeline name="EchoServiceDockerBuild">
       <materials>
         <git url="https://github.com/BrianEliotWhipple/massive-octo-bear.git" autoUpdate="false" />
-        <pipeline pipelineName="BuildEchoService" stageName="BuildService" materialName="EchoServiceArtifact" />
+        <pipeline pipelineName="EchoServiceBuild" stageName="BuildService" materialName="EchoServiceArtifact" />
       </materials>
       <stage name="BuildAndPublishDockerImage">
         <jobs>
@@ -63,7 +63,7 @@
     </pipeline>
     <pipeline name="EchoServiceAcceptance">
       <materials>
-        <pipeline pipelineName="BuildAndPublishEchoServiceDockerImage" stageName="BuildAndPublishDockerImage" />
+        <pipeline pipelineName="EchoServiceDockerBuild" stageName="BuildAndPublishDockerImage" />
         <git url="https://github.com/BrianEliotWhipple/massive-octo-bear.git" autoUpdate="false" materialName="Source" />
       </materials>
       <stage name="DeployEchoServiceToMesos">
