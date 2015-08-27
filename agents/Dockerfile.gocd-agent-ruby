@@ -2,9 +2,12 @@ FROM gocd/gocd-agent:latest
 
 ADD go-agent-start.sh /etc/service/go-agent/run
 
-ENV AGENT_RESOURCES ruby
+ENV AGENT_RESOURCES ruby-2.2
 
 # Install Ruby
+# Copied from the official Ruby 2.2 Dockerfile
+# Updated to work with the gocd-agent image
+
 ENV RUBY_MAJOR 2.2
 ENV RUBY_VERSION 2.2.3
 ENV RUBY_DOWNLOAD_SHA256 df795f2f99860745a416092a4004b016ccf77e8b82dec956b120f18bdc71edce

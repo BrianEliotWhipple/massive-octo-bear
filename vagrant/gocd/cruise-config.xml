@@ -97,7 +97,7 @@
               </exec>
             </tasks>
             <resources>
-              <resource>ruby</resource>
+              <resource>ruby-2.2</resource>
             </resources>
             <artifacts>
               <test src="build/reports" />
