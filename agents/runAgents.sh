@@ -17,4 +17,4 @@ else
 fi
 
 docker run -d -e GO_SERVER=${go_server_host} --name gocd-agent-java-8 ${docker_registry_url}/example/gocd-agent-java-8:0.1
-docker run -d -e GO_SERVER=${go_server_host} --name gocd-agent-ruby ${docker_registry_url}/example/gocd-agent-ruby:0.1
+docker run -d -e GO_SERVER=${go_server_host} --name gocd-agent-ruby-2.2 ${docker_registry_url}/example/gocd-agent-ruby-2.2:0.1

@@ -44,6 +44,3 @@ ENV BUNDLER_VERSION 1.10.6
 RUN gem install bundler --version "$BUNDLER_VERSION" \
     && bundle config --global path "$GEM_HOME" \
     && bundle config --global bin "$GEM_HOME/bin"
-
-# don't create ".bundle" in all our apps
-ENV BUNDLE_APP_CONFIG $GEM_HOME
