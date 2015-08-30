@@ -50,7 +50,7 @@
               </fetchartifact>
               <exec command="./docker_build.sh" workingdir="services/java/echo" />
               <exec command="./docker_publish.sh" workingdir="services/java/echo">
-                <arg>172.17.8.12:5000</arg>
+                <arg>10.245.1.100:5000</arg>
                 <runif status="passed" />
               </exec>
             </tasks>
