@@ -3,7 +3,7 @@
   "container": {
     "type": "DOCKER",
     "docker": {
-      "image": "172.17.8.12:5000/example/java-echo:0.1",
+      "image": "10.245.1.100:5000/example/java-echo:0.1",
       "forcePullImage": true,
       "network": "BRIDGE",
       "portMappings": [
@@ -22,7 +22,7 @@
       ],
       "privileged": false,
       "parameters": [
-        { "key": "env", "value": "CASSANDRA_SEED_HOST=172.17.8.10" }
+        { "key": "env", "value": "CASSANDRA_SERVICE_HOST=10.245.1.101" }
       ]
     },
     "volumes": [ ]

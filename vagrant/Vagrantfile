@@ -12,6 +12,40 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.box = vm_config[vm_platform]['box']
 
+  config.vm.define :gocd do | gocd |
+
+    gocd.vm.network 'private_network', ip: vm_config['gocd']['ip_address']
+    gocd.vm.synced_folder '../services', '/services'
+
+    gocd.vm.provider 'virtualbox' do | vb |
+      vb.memory = vm_config['gocd']['memory']
+      vb.cpus = vm_config['gocd']['cpus']
+    end
+
+
+    gocd.vm.provision 'shell', path: "#{vm_platform}/pre_docker_install.sh"
+
+    gocd.vm.provision 'docker', version: vm_config['gocd']['docker_version']
+
+    vm_config['gocd']['install_images'].each do | image |
+      gocd.vm.provision 'docker', images: [ "#{image['name']}:#{image['tag']}" ]
+    end
+
+    gocd.vm.provision 'shell', path: "#{vm_platform}/post_docker_install.sh"
+
+    # Install GoCD before running docker images since docker will need to be restarted.
+    gocd.vm.provision 'shell', path:  "#{vm_platform}/install_gocd.sh"
+
+    vm_config['gocd']['run_images'].each do | image |
+      gocd.vm.provision 'docker' do | d |
+        d.run "#{image['name']}:#{image['tag']}",
+              args: "#{image['args']}",
+            daemonize: true
+      end
+    end
+
+  end
+
   config.vm.define :mesos_master do | mesos_master |
 
     mesos_master.vm.network 'private_network', ip: vm_config['mesos_master']['ip_address']
@@ -78,37 +112,4 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   end
 
-  config.vm.define :gocd do | gocd |
-
-    gocd.vm.network 'private_network', ip: vm_config['gocd']['ip_address']
-    gocd.vm.synced_folder '../services', '/services'
-
-    gocd.vm.provider 'virtualbox' do | vb |
-      vb.memory = vm_config['gocd']['memory']
-      vb.cpus = vm_config['gocd']['cpus']
-    end
-
-
-    gocd.vm.provision 'shell', path: "#{vm_platform}/pre_docker_install.sh"
-
-    gocd.vm.provision 'docker', version: vm_config['gocd']['docker_version']
-
-    vm_config['gocd']['install_images'].each do | image |
-      gocd.vm.provision 'docker', images: [ "#{image['name']}:#{image['tag']}" ]
-    end
-
-    gocd.vm.provision 'shell', path: "#{vm_platform}/post_docker_install.sh"
-
-    # Install GoCD before running docker images since docker will need to be restarted.
-    gocd.vm.provision 'shell', path:  "#{vm_platform}/install_gocd.sh"
-
-    vm_config['gocd']['run_images'].each do | image |
-      gocd.vm.provision 'docker' do | d |
-        d.run "#{image['name']}:#{image['tag']}",
-              args: "#{image['args']}",
-            daemonize: true
-      end
-    end
-
-  end
 end

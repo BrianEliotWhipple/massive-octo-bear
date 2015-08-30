@@ -1,6 +1,6 @@
 #!/bin/sh
 
-marathon_host="172.17.8.10"
+marathon_host="10.245.1.101"
 
 echo "Deleting example application group on marathon host: ${marathon_host}"
 curl -X DELETE http://${marathon_host}:8080/v2/groups/example

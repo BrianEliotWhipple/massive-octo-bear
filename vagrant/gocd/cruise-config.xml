@@ -78,10 +78,10 @@
       <stage name="AcceptanceTest">
         <environmentvariables>
           <variable name="ECHO_SERVICE_URL">
-            <value>http://172.17.8.10:31000</value>
+            <value>http://10.245.1.101:31000</value>
           </variable>
           <variable name="ECHO_SERVICE_ADMIN_URL">
-            <value>http://172.17.8.10:31001</value>
+            <value>http://10.245.1.101:31001</value>
           </variable>
         </environmentvariables>
         <jobs>
@@ -123,7 +123,7 @@
           <job name="BuildAgents">
             <tasks>
               <exec command="./buildAndPublishAgents.sh" workingdir="agents">
-                <arg>172.17.8.12:5000</arg>
+                <arg>10.245.1.100:5000</arg>
                 <runif status="passed" />
               </exec>
             </tasks>
@@ -138,8 +138,8 @@
           <job name="RunAgents">
             <tasks>
               <exec command="./runAgents.sh" workingdir="agents">
-                <arg>172.17.8.12</arg>
-                <arg>172.17.8.12:5000</arg>
+                <arg>10.245.1.100</arg>
+                <arg>10.245.1.100:5000</arg>
                 <runif status="passed" />
               </exec>
             </tasks>

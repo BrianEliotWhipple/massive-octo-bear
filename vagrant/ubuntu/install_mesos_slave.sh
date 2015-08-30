@@ -21,9 +21,9 @@ sudo sh -c "echo manual > /etc/init/mesos-master.override"
 echo 'docker,mesos' > /etc/mesos-slave/containerizers
 echo '5mins' > /etc/mesos-slave/executor_registration_timeout
 echo 'ports(*):[5000-10000, 31000-32000]' > /etc/mesos-slave/resources
-echo '172.17.8.11' > /etc/mesos-slave/hostname
-echo '172.17.8.11' > /etc/mesos-slave/ip
+echo '10.245.1.102' > /etc/mesos-slave/hostname
+echo '10.245.1.102' > /etc/mesos-slave/ip
 
-sed 's/localhost/172.17.8.10/' -i /etc/mesos/zk
+sed 's/localhost/10.245.1.101/' -i /etc/mesos/zk
 
 sudo service mesos-slave restart

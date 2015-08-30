@@ -8,38 +8,8 @@ ubuntu:
 centos:
   box: chef/centos-7.1   # Centos 7.0 had problems with Vagrant Docker provisioner
 
-mesos_master:
-  ip_address: 172.17.8.10
-  memory: 4096
-  cpus: 4
-  docker_version: 1.6.2
-  install_images:
-    - name: google/cadvisor
-      tag: latest
-    - name: cassandra
-      tag: 2.1
-  run_images:
-    - name: google/cadvisor
-      tag: latest
-      args: --volume=/:/rootfs:ro --volume=/var/run:/var/run:rw --volume=/sys:/sys:ro --volume=/var/lib/docker/:/var/lib/docker:ro --publish=9999:8080 --privileged=true --volume=/cgroup:/cgroup:ro --name=cadvisor
-
-mesos_slave:
-  ip_address: 172.17.8.11
-  memory: 4096
-  cpus: 4
-  docker_version: 1.6.2
-  install_images:
-    - name: google/cadvisor
-      tag: latest
-    - name: cassandra
-      tag: 2.1
-  run_images:
-    - name: google/cadvisor
-      tag: latest
-      args: --volume=/:/rootfs:ro --volume=/var/run:/var/run:rw --volume=/sys:/sys:ro --volume=/var/lib/docker/:/var/lib/docker:ro --publish=9999:8080 --privileged=true --volume=/cgroup:/cgroup:ro --name=cadvisor
-
 gocd:
-  ip_address: 172.17.8.12
+  ip_address: 10.245.1.100
   memory: 4096
   cpus: 4
   docker_version: 1.6.2
@@ -58,6 +28,36 @@ gocd:
     - name: registry
       tag:  0.9.1
       args: --name docker-registry -p 5000:5000 -e GUNICORN_OPTS=["--preload"]
+    - name: google/cadvisor
+      tag: latest
+      args: --volume=/:/rootfs:ro --volume=/var/run:/var/run:rw --volume=/sys:/sys:ro --volume=/var/lib/docker/:/var/lib/docker:ro --publish=9999:8080 --privileged=true --volume=/cgroup:/cgroup:ro --name=cadvisor
+
+mesos_master:
+  ip_address: 10.245.1.101
+  memory: 4096
+  cpus: 4
+  docker_version: 1.6.2
+  install_images:
+    - name: google/cadvisor
+      tag: latest
+    - name: cassandra
+      tag: 2.1
+  run_images:
+    - name: google/cadvisor
+      tag: latest
+      args: --volume=/:/rootfs:ro --volume=/var/run:/var/run:rw --volume=/sys:/sys:ro --volume=/var/lib/docker/:/var/lib/docker:ro --publish=9999:8080 --privileged=true --volume=/cgroup:/cgroup:ro --name=cadvisor
+
+mesos_slave:
+  ip_address: 10.245.1.102
+  memory: 4096
+  cpus: 4
+  docker_version: 1.6.2
+  install_images:
+    - name: google/cadvisor
+      tag: latest
+    - name: cassandra
+      tag: 2.1
+  run_images:
     - name: google/cadvisor
       tag: latest
       args: --volume=/:/rootfs:ro --volume=/var/run:/var/run:rw --volume=/sys:/sys:ro --volume=/var/lib/docker/:/var/lib/docker:ro --publish=9999:8080 --privileged=true --volume=/cgroup:/cgroup:ro --name=cadvisor

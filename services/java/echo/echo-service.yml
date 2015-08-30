@@ -47,5 +47,5 @@ logging:
 #      timeZone: UTC
 
 cassandra:
-    seedHost: ${CASSANDRA_SEED_HOST}
+    seedHost: ${CASSANDRA_SERVICE_HOST}
     seedCqlPort: 9042
