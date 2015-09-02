@@ -11,3 +11,6 @@ build
 
 # Dagger auto generated code
 dagger
+
+# Ignore temp kubernetes config file
+kube.config
